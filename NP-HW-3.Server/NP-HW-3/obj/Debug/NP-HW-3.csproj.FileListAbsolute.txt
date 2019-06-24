@@ -1,0 +1,7 @@
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\bin\Debug\NP-HW-3.exe.config
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\bin\Debug\NP-HW-3.exe
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\bin\Debug\NP-HW-3.pdb
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\obj\Debug\NP-HW-3.csprojAssemblyReference.cache
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\obj\Debug\NP-HW-3.csproj.CoreCompileInputs.cache
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\obj\Debug\NP-HW-3.exe
+C:\Users\azat\source\repos\NP-HW-3\NP-HW-3\obj\Debug\NP-HW-3.pdb

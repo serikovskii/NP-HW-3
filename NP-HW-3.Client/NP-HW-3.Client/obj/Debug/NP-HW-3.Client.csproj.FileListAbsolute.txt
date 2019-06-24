@@ -1,0 +1,15 @@
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\bin\Debug\NP-HW-3.Client.exe.config
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\bin\Debug\NP-HW-3.Client.exe
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\bin\Debug\NP-HW-3.Client.pdb
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client.csprojAssemblyReference.cache
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\MainWindow.g.cs
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\App.g.cs
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client_MarkupCompile.cache
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client_MarkupCompile.lref
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\MainWindow.baml
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client.g.resources
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP_HW_3.Client.Properties.Resources.resources
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client.csproj.GenerateResource.cache
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client.csproj.CoreCompileInputs.cache
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client.exe
+C:\Users\azat\source\repos\NP-HW-3.Client\NP-HW-3.Client\obj\Debug\NP-HW-3.Client.pdb
