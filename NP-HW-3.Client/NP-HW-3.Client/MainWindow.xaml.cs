@@ -69,22 +69,24 @@ namespace NP_HW_3.Client
         public void LisetenThreadProc(object obj)
         {
             var client = obj as TcpClient;
-            byte[] buffer;
-
+            var clietnsName = new List<string>();
             while (true)
             {
-                buffer = new byte[1024 * 4];
+                var buffer = new byte[1024 * 4];
                 var reciveSize = client.Client.Receive(buffer);
-                if(Encoding.UTF8.GetString(buffer, 0, reciveSize).Contains("name"))
+                var reciveBuffer = Encoding.UTF8.GetString(buffer, 0, reciveSize);
+                int bufferSize = 0;
+                string nameUser;
+                for (int i = 0; i < reciveSize; i++)
                 {
-                    //var byteBuf = Encoding.UTF8.GetString(buffer, 4, reciveSize);
-                    namesUser.Add(Encoding.UTF8.GetString(buffer, 4, reciveSize));
-                    var list = Encoding.UTF8.GetString(buffer, 4, reciveSize);
+                    if(reciveBuffer[i] == '#')
+                    {
+                        bufferSize = i;
+                        break;
+                    }
                 }
-                else 
-                    Dispatcher.Invoke(() => chat.AppendText($"{Encoding.UTF8.GetString(buffer, 0, reciveSize)} \n"));
-                Dispatcher.Invoke(() => clients.ItemsSource = namesUser);
-                buffer = null;
+                Dispatcher.Invoke(() => chat.AppendText($"{Encoding.UTF8.GetString(buffer, 0, reciveSize-bufferSize)} \n"));
+                nameUser = Encoding.UTF8.GetString(buffer, bufferSize + 1, reciveSize);
             }
         }
 

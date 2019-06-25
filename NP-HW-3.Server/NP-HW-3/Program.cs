@@ -73,17 +73,25 @@ namespace NP_HW_3
             string messageServer = "";
             int reciveSize;
             int reciveSizeName;
-
+            List<string> names = new List<string>();
             reciveSizeName = client.Client.Receive(buffer);
             clientName = Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSizeName);
             clients.Add(clientName, client);
             Console.WriteLine($"Клиент {clientName} \r\n");
 
+            
+            foreach(var cl in clients)
+            {
+                names.Add(cl.Key);
+                //clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"name {clients.ElementAt(j).Key}"));
+
+            }
+            
             for (int i = 0; i < clients.Count(); i++)
             {
-                clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"New user connected {clientName}"));
+                clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"New user connected {clientName}#{names.ToString()}"));
+               
             }
-
 
 
 
