@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace NP_HW_3
 {
@@ -15,7 +14,6 @@ namespace NP_HW_3
         static Thread thread;
         static ManualResetEvent eventStop;
         static Dictionary<string, TcpClient> clients;
-
 
         static void Main(string[] args)
         {
@@ -46,76 +44,95 @@ namespace NP_HW_3
                     if (eventStop.WaitOne(0) == true)
                         return;
                 }
-
             }
         }
 
         static void AsyncServerProc(IAsyncResult iAsync)
         {
-
             TcpListener server = (TcpListener)iAsync.AsyncState;
             TcpClient client = server.EndAcceptTcpClient(iAsync);
             Console.WriteLine("Подключился клиент");
             Console.WriteLine("IP адрес клиента " + client.Client.RemoteEndPoint.ToString() + "\n");
             ThreadPool.QueueUserWorkItem(ClientThreadProc, client);
-
         }
 
         static void ClientThreadProc(object obj)
         {
             TcpClient client = (TcpClient)obj;
-
             Console.WriteLine("Рабочий поток клиента запущен");
             var buffer = new byte[1024 * 4];
 
             string clientName;
-            string messageClient = "";
             string messageServer = "";
             int reciveSize;
             int reciveSizeName;
-            List<string> names = new List<string>();
+
             reciveSizeName = client.Client.Receive(buffer);
             clientName = Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSizeName);
             clients.Add(clientName, client);
             Console.WriteLine($"Клиент {clientName} \r\n");
 
-            
-            foreach(var cl in clients)
-            {
-                names.Add(cl.Key);
-                //clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"name {clients.ElementAt(j).Key}"));
-
-            }
-            
             for (int i = 0; i < clients.Count(); i++)
             {
-                clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"New user connected {clientName}#{names.ToString()}"));
-               
+                clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"New user connected {clientName}"));
             }
-
-
 
             while (true)
             {
-
-                var ipClient = client.Client.RemoteEndPoint.ToString();
+                SendList(client);
                 reciveSize = client.Client.Receive(buffer);
+
                 if (reciveSize == 0)
                 {
                     Console.WriteLine("stop");
                     clients.Clear();
                     break;
                 }
-                messageClient = Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSize);
-                messageServer = $"{clientName}: {messageClient} \n";
 
-                for (int i = 0; i < clients.Count(); i++)
+                if (Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSize).Contains("#"))
                 {
-                    clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageServer));
+                    int indexSymbol=0;
+                    string nameRecipient="";
+                    string messageToResipient="";
+
+                    for (int i = 0; i < Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSize).Count(); i++)
+                    {
+                        if (Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSize)[i] == '*')
+                        {
+                            indexSymbol = i;
+                        }
+                    }
+
+                    nameRecipient = Encoding.GetEncoding(1251).GetString(buffer, 1, reciveSize - indexSymbol-1);
+                    messageToResipient = Encoding.GetEncoding(1251).GetString(buffer, indexSymbol+1, reciveSize - indexSymbol-1);
+                    messageServer = $"{clientName}: {messageToResipient} \n";
+                    clients.Where(c => c.Key.Contains(nameRecipient)).FirstOrDefault().Value.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageServer));
+                    clients.Where(c => c.Key.Contains(clientName)).FirstOrDefault().Value.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageServer));
                 }
 
+                else
+                {
+                    messageServer = $"{clientName}: {Encoding.GetEncoding(1251).GetString(buffer, 0, reciveSize)} \n";
+                    for (int i = 0; i < clients.Count(); i++)
+                    {
+                        clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageServer));
+                    }
+                }
+            }
+        }
 
+        static void SendList(object obj)
+        {
+            var client = (TcpClient)obj;
+            for (int j = 0; j < clients.Count(); j++)
+            {
+                for (int i = 0; i < clients.Count(); i++)
+                {
+                    clients.ElementAt(i).Value.Client.Send(Encoding.GetEncoding(1251).GetBytes($"name {clients.ElementAt(j).Key}"));
 
+                    Thread.Sleep(200);
+                }
+                Thread.Sleep(200);
             }
         }
     }

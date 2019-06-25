@@ -1,26 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace NP_HW_3.Client
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private TcpClient client;
@@ -28,12 +15,13 @@ namespace NP_HW_3.Client
         private Thread sendThread;
         private bool buttonIsEnabled;
         private string messageName;
-        private List<string> namesUser;
+        private ObservableCollection<string> namesUser;
         public MainWindow()
         {
             InitializeComponent();
             buttonIsEnabled = false;
-            namesUser = new List<string>();
+            namesUser = new ObservableCollection<string>();
+            namesUser.Add("All");
         }
 
         private void ConnectedButton(object sender, RoutedEventArgs e)
@@ -43,7 +31,7 @@ namespace NP_HW_3.Client
                 try
                 {
                     client = new TcpClient();
-                    client.Connect(IPAddress.Parse(ip.Text), int.Parse(port.Text));
+                    client.Connect(IPAddress.Parse("127.0.0.1"), 12345);
                     listenThread = new Thread(LisetenThreadProc);
                     listenThread.Start(client);
                     sendThread = new Thread(SendThreadProc);
@@ -61,7 +49,6 @@ namespace NP_HW_3.Client
                 sendThread.Abort();
                 listenThread.Abort();
                 client.Close();
-
                 buttonIsEnabled = false;
                 connect.Content = "Start";
             }
@@ -69,24 +56,26 @@ namespace NP_HW_3.Client
         public void LisetenThreadProc(object obj)
         {
             var client = obj as TcpClient;
-            var clietnsName = new List<string>();
+            byte[] buffer;
+
             while (true)
             {
-                var buffer = new byte[1024 * 4];
+                buffer = new byte[1024 * 4];
                 var reciveSize = client.Client.Receive(buffer);
-                var reciveBuffer = Encoding.UTF8.GetString(buffer, 0, reciveSize);
-                int bufferSize = 0;
-                string nameUser;
-                for (int i = 0; i < reciveSize; i++)
+                var byteBuf = Encoding.UTF8.GetString(buffer, 5, reciveSize - 5);
+                if (Encoding.UTF8.GetString(buffer, 0, reciveSize).Contains("name"))
                 {
-                    if(reciveBuffer[i] == '#')
+                    if (byteBuf != Dispatcher.Invoke(() => name.Text) && !namesUser.Contains(byteBuf))
                     {
-                        bufferSize = i;
-                        break;
+                        Dispatcher.Invoke(() => namesUser.Add(byteBuf));
+                        Dispatcher.Invoke(() => clients.ItemsSource = namesUser);
                     }
+                    else
+                        continue;
                 }
-                Dispatcher.Invoke(() => chat.AppendText($"{Encoding.UTF8.GetString(buffer, 0, reciveSize-bufferSize)} \n"));
-                nameUser = Encoding.UTF8.GetString(buffer, bufferSize + 1, reciveSize);
+                else
+                    Dispatcher.Invoke(() => chat.AppendText($"{Encoding.UTF8.GetString(buffer, 0, reciveSize)} \n"));
+                buffer = null;
             }
         }
 
@@ -112,13 +101,16 @@ namespace NP_HW_3.Client
                 Dispatcher.Invoke(() => messageName = name.Text);
                 client.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageName));
             }
+            else if (Dispatcher.Invoke(() => clients.SelectedIndex>0))
+            {
+                Dispatcher.Invoke(() => messageName = $"#{clients.SelectedValue}*{message.Text}");
+                client.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageName));
+            }
             else
             {
                 Dispatcher.Invoke(() => messageToServer = message.Text);
                 client.Client.Send(Encoding.GetEncoding(1251).GetBytes(messageToServer));
-
             }
-
         }
     }
 }

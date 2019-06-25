@@ -3,18 +3,42 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:NP_HW_3.Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="700">
     <Grid>
-        <TextBox Name="ip" HorizontalAlignment="Left" Height="23" Margin="44,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="port" HorizontalAlignment="Left" Height="23" Margin="208,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
-        <TextBox Name="chat" HorizontalAlignment="Left" Height="323" Margin="333,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="391"/>
-        <Button Name="connect" Content="Connect" Click="ConnectedButton" HorizontalAlignment="Left" Margin="208,113,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBox Name="name" HorizontalAlignment="Left" Height="23" Margin="44,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <ComboBox Name="clients" HorizontalAlignment="Left" Margin="44,225,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="message" HorizontalAlignment="Left" Height="73" Margin="44,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button Name="send" Content="Send" Click="SendMessage" HorizontalAlignment="Left" Margin="44,366,0,0" VerticalAlignment="Top" Width="75"/>
-
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.Column="0" Grid.Row="0" Height="70" Padding="10" Margin="10" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Name="ip" Height="25" TextWrapping="Wrap" FontSize="12" materialDesign:HintAssist.Hint="IP: 127.0.0.1" VerticalAlignment="Center" Margin="10" Width="100"/>
+                <TextBox Name="port" Height="25" TextWrapping="Wrap" FontSize="12" materialDesign:HintAssist.Hint="Port: 12345" VerticalAlignment="Center" Margin="10" Width="90"/>
+                <TextBox Name="name" Height="25" TextWrapping="Wrap" FontSize="12" materialDesign:HintAssist.Hint="Enter Login" VerticalAlignment="Center" Margin="10" Width="150"/>
+            </StackPanel>
+        </materialDesign:Card>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.Column="2" Grid.Row="0" Height="70" Padding="10" Margin="10">
+            <Button x:Name="connect" Content="Connect" Click="ConnectedButton" VerticalAlignment="Center" HorizontalAlignment="Center" Width="120"/>
+        </materialDesign:Card>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.Column="1" Grid.Row="1" Height="250" Padding="10" Margin="10" Grid.ColumnSpan="2">
+            <RichTextBox Name="chat" HorizontalAlignment="Left" Height="220" VerticalAlignment="Top" Margin="5" Width="400" BorderThickness="0" Background="WhiteSmoke"/>
+        </materialDesign:Card>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.Column="0" Grid.Row="1" Height="250" Padding="10" Margin="10">
+            <ComboBox Name="clients" FontSize="13" materialDesign:HintAssist.Hint="Select users" HorizontalAlignment="Center" VerticalAlignment="Top" Width="160" Height="40"/>
+        </materialDesign:Card>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="70" Padding="10" Margin="10">
+            <TextBox Name="message" Height="55" TextWrapping="Wrap" Padding="5" FontSize="13" Background="WhiteSmoke" materialDesign:HintAssist.Hint="Entry message" VerticalAlignment="Center" Margin="5"/>
+        </materialDesign:Card>
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Grid.Column="2" Grid.Row="2" Height="70" Padding="10" Margin="10">
+            <Button Name="send" Content="Send" Click="SendMessage" VerticalAlignment="Center" HorizontalAlignment="Center" Width="120"/>
+        </materialDesign:Card>
     </Grid>
 </Window>
